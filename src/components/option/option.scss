@@ -1,0 +1,41 @@
+@use '../../scss/common' as *;
+
+@mixin option-styles {
+    display: flex;
+    gap: 0.5rem;
+    cursor: pointer;
+    background: transparent;
+    border: 2px solid rgb(225, 225, 225,.2);
+    border-radius: 4px;
+    margin:15px 0;
+    padding: 12px;
+    transition: 0.3s;
+    
+  }
+
+.option-default{
+    @include option-styles;
+    &:hover {
+        background-color: rgb(225, 225, 225,.1);
+        border-color: rgb(225, 225, 225,.1);
+      }
+}
+
+.option-selected{
+    @include option-styles;
+    border: 2px solid $default-color;
+}
+
+.option-correct{
+    @include option-styles;
+    background: #09001d;
+    color: #00a63d;
+    border: 2px solid #00a63d;
+}
+
+.option-wrong{
+    @include option-styles;
+    background: #09001d;
+    color: #a60045;
+    border: 2px solid #a60045;
+}

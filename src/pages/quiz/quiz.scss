@@ -1,0 +1,67 @@
+@use '../../scss/common/index' as *;
+
+.quiz-layout {
+    display: grid;
+    place-content: center;
+    background-color: $secondary-color;
+    color: $primary-font-color;
+    width: 100%;
+    min-height: 100vh;
+}
+
+.quiz-card{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    border: 2px solid $primary-color;
+    width: 650px;
+    padding: 20px 30px;
+    border-radius: 6px;
+    background-color:transparent;
+    h1 {
+        font-size: 32px;
+        margin: 0;
+        color: $default-color;
+        background:linear-gradient(45deg,transparent,$primary-color,transparent);
+        border-radius: 6px;
+        text-align: center;
+    }    
+}
+
+.quiz-header{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0 10px 0;
+    font-size: 18px;
+    font-weight: 500;
+    border-bottom: 1.5px solid $primary-color;
+
+    span{
+        padding: 7px;
+    }
+
+    .score{
+        background-color: $primary-color;
+        color: $default-color;
+        border-radius: 3px;
+    }
+}
+
+.quiz-question{
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.btn-container{
+    display:flex;
+    justify-content:space-between;
+    gap:20px;
+}
+
+.btn-container-inner{
+    flex: 1;
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+}
