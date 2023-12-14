@@ -3,14 +3,23 @@ import questionsData from "../../constants/questions.json";
 import Button from "../../components/buttons/button";
 import Option from "../../components/option/option";
 import Timer from "../../components/timer";
-// import { timerSelector } from "../../store/selectors/timer";
+import { timerSelector } from "../../store/selectors/timer";
+import { useNavigate } from "react-router-dom";
 import "./quiz.scss";
 
 function Quiz() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState({});
-  //const secondsRemaining = timerSelector().secondsRemaining;
+  const secondsRemaining = timerSelector().secondsRemaining;
   const currentQuestion = questionsData.questions[currentQuestionIndex];
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (secondsRemaining === 0) {
+      alert("Times Up!");
+      navigate("/result");
+    }
+  }, [secondsRemaining]);
 
   const handleAnswerSelection = (selectedAnswer) => {
     console.log("handle answer");
