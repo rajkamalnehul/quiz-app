@@ -1,10 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { TIMER_DURATION } from "../../../constants/constants";
 
 export const timerSlice = createSlice({
   name: "timer",
   initialState: {
-    totalDuration: 10,
-    secondsRemaining: 10,
+    totalDuration: TIMER_DURATION,
+    secondsRemaining: TIMER_DURATION,
     startTime: null,
   },
   reducers: {

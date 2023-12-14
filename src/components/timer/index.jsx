@@ -3,23 +3,26 @@ import { timerSelector } from "../../store/selectors/timer";
 import { updateSecondsRemaining } from "../../store/slices/timer";
 import { updateStartTime } from "../../store/slices/timer";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 function Timer() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [now, setNow] = useState(null);
   const timerRef = useRef(null);
   const secondsRemaining = timerSelector().secondsRemaining;
   const totalDuration = timerSelector().totalDuration;
   const startTime = timerSelector().startTime;
-  console.log(secondsRemaining);
 
   useEffect(() => {
-    //Code to not reset start time if user refresh page
-    if (startTime) {
-      dispatch(updateStartTime(startTime));
-    } else {
-      dispatch(updateStartTime(Date.now()));
-    }
+    // Code to not reset start time if user refresh page
+    // if (startTime) {
+    //   dispatch(updateStartTime(startTime));
+    // } else {
+    //   dispatch(updateStartTime(Date.now()));
+    // }
+    //Temp code below
+    dispatch(updateStartTime(Date.now()));
     setNow(Date.now());
 
     clearInterval(timerRef.current);
@@ -42,6 +45,13 @@ function Timer() {
       }
     }
   }, [now]);
+
+  useEffect(() => {
+    // if (secondsRemaining === 0) {
+    //   alert("Times Up!");
+    //   navigate("/result");
+    // }
+  }, [secondsRemaining]);
 
   const minutes = Math.floor(secondsRemaining / 60);
   const seconds = Math.floor(secondsRemaining % 60);

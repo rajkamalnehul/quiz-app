@@ -1,51 +1,24 @@
 {
   "questions": [
     {
-      "id": 1,
+      "id": "1",
       "type": "multiple_choice",
       "question": "What is the capital of France?",
       "options": ["Paris", "London", "Berlin", "Madrid"],
       "correctAnswer": "Paris"
     },
     {
-      "id": 2,
+      "id": "2",
       "type": "true_false",
       "question": "Is the Earth round?",
       "correctAnswer": true
     },
     {
-      "id": 3,
+      "id": "3",
       "type": "open_ended",
       "question": "What is the largest planet in our solar system?",
       "correctAnswer": "Jupiter"
-    },
-    {
-      "id": 4,
-      "type": "multiple_choice",
-      "question": "Which of the following is a programming language?",
-      "options": ["HTML", "CSS", "JavaScript", "XML"],
-      "correctAnswer": ["JavaScript", "HTML"]
-    },
-    {
-      "id": 5,
-      "type": "multiple_choice",
-      "question": "Which of the following is a programming language?",
-      "options": ["HTML", "CSS", "JavaScript", "XML"],
-      "correctAnswer": ["JavaScript", "HTML"]
-    },
-    {
-      "id": 6,
-      "type": "multiple_choice",
-      "question": "Which of the following is a programming language?",
-      "options": ["HTML", "CSS", "JavaScript", "XML"],
-      "correctAnswer": ["JavaScript", "HTML"]
-    },
-    {
-      "id": 7,
-      "type": "multiple_choice",
-      "question": "Which of the following is a programming language?",
-      "options": ["HTML", "CSS", "JavaScript", "XML"],
-      "correctAnswer": ["JavaScript", "HTML","XML"]
     }
+    
   ]
 }

@@ -1,27 +1,18 @@
-import React, { memo } from "react";
+import React from "react";
 import "./buttons.scss";
 
-const Button = memo(
-  function Button({ label, className = "", disabled, ...rest }) {
-    console.log("button rendering...");
+function Button({ label, className = "", disabled, ...rest }) {
+  console.log("button rendering...");
 
-    return (
-      <button
-        className={`${disabled ? "disabled-button" : className}`}
-        {...(rest || {})}
-      >
-        {label}
-      </button>
-    );
-  },
-  (prevProps, nextProps) => {
-    // Custom comparison func for memoization
-    return (
-      prevProps.label === nextProps.label &&
-      prevProps.className === nextProps.className &&
-      prevProps.disabled === nextProps.disabled
-    );
-  }
-);
+  return (
+    <button
+      className={`${disabled ? "disabled-button" : className}`}
+      disabled={disabled}
+      {...(rest || {})}
+    >
+      {label}
+    </button>
+  );
+}
 
 export default Button;

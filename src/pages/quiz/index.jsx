@@ -2,49 +2,44 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import questionsData from "../../constants/questions.json";
 import Button from "../../components/buttons/button";
 import Option from "../../components/option/option";
+import Input from "../../components/input/input";
 import Timer from "../../components/timer";
-import { timerSelector } from "../../store/selectors/timer";
-import { useNavigate } from "react-router-dom";
+import { quizDataSelector } from "../../store/selectors/quizData";
+import {
+  updateQuizData,
+  updateQuestionIndex,
+} from "../../store/slices/quizData";
+import { useDispatch } from "react-redux";
 import "./quiz.scss";
 
 function Quiz() {
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const dispatch = useDispatch();
   const [userAnswers, setUserAnswers] = useState({});
-  const secondsRemaining = timerSelector().secondsRemaining;
+  const currentQuestionIndex = quizDataSelector().currentQuestionIndex;
+  const submittedAnswers = quizDataSelector().submittedAnswers;
+  const score = quizDataSelector().score;
   const currentQuestion = questionsData.questions[currentQuestionIndex];
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    if (secondsRemaining === 0) {
-      alert("Times Up!");
-      navigate("/result");
-    }
-  }, [secondsRemaining]);
-
+  console.log(quizDataSelector());
   const handleAnswerSelection = (selectedAnswer) => {
-    console.log("handle answer");
-    const currentQuestion = questionsData.questions[currentQuestionIndex];
     setUserAnswers((prevAnswers) => ({
       ...prevAnswers,
       [currentQuestion.id]: selectedAnswer,
     }));
   };
 
-  // console.log(userAnswers, currentQuestionIndex);
-
   const handleNextQuestion = () => {
-    console.log("handlenext");
-    setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
+    if (currentQuestionIndex < questionsData.questions.length - 1)
+      dispatch(updateQuestionIndex(currentQuestionIndex + 1));
   };
 
   const handlePreviousQuestion = () => {
-    setCurrentQuestionIndex((prevIndex) => prevIndex - 1);
+    if (currentQuestionIndex > 0)
+      dispatch(updateQuestionIndex(currentQuestionIndex - 1));
   };
 
   const checkUserResponse = () => {
-    const currentQuestion = questionsData.questions[currentQuestionIndex];
     const userResponse = userAnswers[currentQuestion.id];
-
     if (
       currentQuestion.type === "multiple_choice" ||
       currentQuestion.type === "true_false"
@@ -58,8 +53,44 @@ function Quiz() {
     }
   };
 
+  const isOptionSelected = (id) => {
+    const answeredIds = Object.keys(userAnswers);
+    if (answeredIds.indexOf(id) > -1) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const isAnswerSubmitted = (id) => {
+    const submitedIds = Object.keys(submittedAnswers);
+    if (submitedIds.indexOf(id) > -1) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   const checkAnswer = () => {
-    console.log(checkUserResponse());
+    const reduxAnswers = { ...submittedAnswers };
+    const userResponse = userAnswers[currentQuestion.id];
+    if (isOptionSelected(currentQuestion.id)) {
+      if (isAnswerSubmitted(currentQuestion.id)) {
+        alert("Cannot change once submited");
+      } else {
+        dispatch(
+          updateQuizData({
+            ...reduxAnswers,
+            [currentQuestion.id]: {
+              answer: userResponse,
+              isCorrect: checkUserResponse(),
+            },
+          })
+        );
+      }
+    } else {
+      alert("Please answer to submit");
+    }
   };
 
   return (
@@ -67,8 +98,10 @@ function Quiz() {
       <div className="quiz-card">
         <h1>Quiz</h1>
         <div className="quiz-header">
-          <span>1/15</span>
-          <span className="score">Score : 10</span>
+          <span>{`${currentQuestionIndex + 1} / ${
+            questionsData.questions.length
+          }`}</span>
+          <span className="score">Score : {score || 0}</span>
           <Timer />
         </div>
         <p className="quiz-question">{currentQuestion.question}</p>
@@ -91,29 +124,30 @@ function Quiz() {
         )}
         {currentQuestion.type === "true_false" && (
           <div>
-            <input
-              type="radio"
-              id="true"
-              value="true"
-              name="answer"
-              onChange={() => handleAnswerSelection(true)}
-              checked={userAnswers[currentQuestion.id] === true}
+            <Option
+              text={"TRUE"}
+              onClick={() => handleAnswerSelection(true)}
+              type={
+                userAnswers[currentQuestion.id] === true
+                  ? "selected"
+                  : "default"
+              }
             />
-            <label htmlFor="true">True</label>
-            <input
-              type="radio"
-              id="false"
-              value="false"
-              name="answer"
-              onChange={() => handleAnswerSelection(false)}
-              checked={userAnswers[currentQuestion.id] === false}
+            <Option
+              text={"FALSE"}
+              onClick={() => handleAnswerSelection(false)}
+              type={
+                userAnswers[currentQuestion.id] === false
+                  ? "selected"
+                  : "default"
+              }
             />
-            <label htmlFor="false">False</label>
           </div>
         )}
         {currentQuestion.type === "open_ended" && (
-          <input
+          <Input
             type="text"
+            inputType={"default"}
             value={userAnswers[currentQuestion.id] || ""}
             onChange={(e) => handleAnswerSelection(e.target.value)}
           />
@@ -138,7 +172,7 @@ function Quiz() {
           </div>
 
           <Button
-            onClick={checkAnswer}
+            onClick={() => checkAnswer()}
             label={"Submit"}
             className={"primary-button"}
           />
