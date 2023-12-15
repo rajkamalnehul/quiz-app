@@ -7,3 +7,12 @@
 .instruction-card {
     @include card-styles
 }
+
+.instructions{
+    margin: 5px 0;
+}
+
+.button-container{
+    display: flex;
+    justify-content: center;
+}
