@@ -7,7 +7,7 @@ import Result from "./pages/result";
 function App() {
   const router = createBrowserRouter([
     {
-      path: "/instructions",
+      path: "/",
       element: <Instructions />,
     },
     {
