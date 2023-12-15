@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { SCORE_PER_QUESTION } from "../../../constants/constants";
 
 export const quizDataSlice = createSlice({
   name: "quizdata",
@@ -12,7 +13,9 @@ export const quizDataSlice = createSlice({
       state.submittedAnswers = action.payload;
       let newScore = 0;
       for (let key in action.payload) {
-        action.payload[key].isCorrect ? (newScore = newScore + 10) : newScore;
+        action.payload[key].isCorrect
+          ? (newScore = newScore + SCORE_PER_QUESTION)
+          : newScore;
       }
       state.score = newScore;
     },

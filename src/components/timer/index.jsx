@@ -1,6 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import { timerSelector } from "../../store/selectors/timer";
-import { updateSecondsRemaining } from "../../store/slices/timer";
+import {
+  updateSecondsRemaining,
+  submitQuizTimer,
+} from "../../store/slices/timer";
 import { updateStartTime } from "../../store/slices/timer";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -48,6 +51,7 @@ function Timer() {
 
   useEffect(() => {
     if (secondsRemaining === 0 && quizStatus == "in_progress") {
+      dispatch(submitQuizTimer());
       alert("Times Up!");
       navigate("/result");
     } else if (secondsRemaining === 0 && quizStatus == "quit") {
