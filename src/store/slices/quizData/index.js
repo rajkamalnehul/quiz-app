@@ -19,9 +19,15 @@ export const quizDataSlice = createSlice({
     updateQuestionIndex: (state, action) => {
       state.currentQuestionIndex = action.payload;
     },
+    resetQuiz: (state) => {
+      state.score = 0;
+      state.submittedAnswers = {};
+      state.currentQuestionIndex = 0;
+    },
   },
 });
 
-export const { updateQuizData, updateQuestionIndex } = quizDataSlice.actions;
+export const { updateQuizData, updateQuestionIndex, resetQuiz } =
+  quizDataSlice.actions;
 
 export default quizDataSlice.reducer;

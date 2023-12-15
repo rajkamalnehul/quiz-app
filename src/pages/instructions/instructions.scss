@@ -1,0 +1,9 @@
+@use '../../scss/common/index' as *;
+
+.instruction-layout {
+    @include layout-styles  
+}
+
+.instruction-card {
+    @include card-styles
+}

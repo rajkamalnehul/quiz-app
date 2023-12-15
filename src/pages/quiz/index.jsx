@@ -1,26 +1,30 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState } from "react";
 import questionsData from "../../constants/questions.json";
 import Button from "../../components/buttons/button";
 import Option from "../../components/option/option";
 import Input from "../../components/input/input";
 import Timer from "../../components/timer";
+import { statusSelector } from "../../store/selectors/timer";
 import { quizDataSelector } from "../../store/selectors/quizData";
+import { quitQuizTimer, submitQuizTimer } from "../../store/slices/timer";
 import {
   updateQuizData,
   updateQuestionIndex,
 } from "../../store/slices/quizData";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import "./quiz.scss";
 
 function Quiz() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [userAnswers, setUserAnswers] = useState({});
   const currentQuestionIndex = quizDataSelector().currentQuestionIndex;
   const submittedAnswers = quizDataSelector().submittedAnswers;
   const score = quizDataSelector().score;
+  const quizStatus = statusSelector();
   const currentQuestion = questionsData.questions[currentQuestionIndex];
 
-  console.log(quizDataSelector());
   const handleAnswerSelection = (selectedAnswer) => {
     setUserAnswers((prevAnswers) => ({
       ...prevAnswers,
@@ -93,6 +97,25 @@ function Quiz() {
     }
   };
 
+  function getOptionType(option, currentQuestion, submittedAnswers) {
+    const isSubmitted = isAnswerSubmitted(currentQuestion.id);
+    const isCorrect = submittedAnswers[currentQuestion.id]?.isCorrect || false;
+    const isCorrectOption = currentQuestion?.correctAnswer === option || false;
+    const isSelected = userAnswers[currentQuestion.id] === option || false;
+
+    if (isSubmitted) {
+      if (isCorrect && isCorrectOption) {
+        return "correct";
+      } else if (isCorrect && !isCorrectOption) {
+        return "default";
+      } else {
+        return isCorrectOption ? "correct" : "wrong";
+      }
+    } else {
+      return isSelected ? "selected" : "default";
+    }
+  }
+
   return (
     <div className="quiz-layout">
       <div className="quiz-card">
@@ -111,12 +134,21 @@ function Quiz() {
               <React.Fragment key={index}>
                 <Option
                   text={option}
-                  onClick={() => handleAnswerSelection(option)}
-                  type={
-                    userAnswers[currentQuestion.id] === option
-                      ? "selected"
-                      : "default"
+                  label={
+                    index == 0
+                      ? "A. "
+                      : index == 1
+                      ? "B. "
+                      : index == 2
+                      ? "C. "
+                      : "D. "
                   }
+                  onClick={() => handleAnswerSelection(option)}
+                  type={getOptionType(
+                    option,
+                    currentQuestion,
+                    submittedAnswers
+                  )}
                 />
               </React.Fragment>
             ))}
@@ -126,29 +158,31 @@ function Quiz() {
           <div>
             <Option
               text={"TRUE"}
+              label={"A."}
               onClick={() => handleAnswerSelection(true)}
-              type={
-                userAnswers[currentQuestion.id] === true
-                  ? "selected"
-                  : "default"
-              }
+              type={getOptionType(true, currentQuestion, submittedAnswers)}
             />
             <Option
               text={"FALSE"}
+              label={"B. "}
               onClick={() => handleAnswerSelection(false)}
-              type={
-                userAnswers[currentQuestion.id] === false
-                  ? "selected"
-                  : "default"
-              }
+              type={getOptionType(false, currentQuestion, submittedAnswers)}
             />
           </div>
         )}
         {currentQuestion.type === "open_ended" && (
           <Input
             type="text"
-            inputType={"default"}
-            value={userAnswers[currentQuestion.id] || ""}
+            inputType={getOptionType(
+              submittedAnswers[currentQuestion.id]?.answer || "",
+              currentQuestion,
+              submittedAnswers
+            )}
+            value={
+              submittedAnswers[currentQuestion.id]?.answer ||
+              userAnswers[currentQuestion.id] ||
+              ""
+            }
             onChange={(e) => handleAnswerSelection(e.target.value)}
           />
         )}
@@ -160,7 +194,6 @@ function Quiz() {
               disabled={currentQuestionIndex === 0}
               className={"outlined-button"}
             />
-
             <Button
               onClick={handleNextQuestion}
               label={"Next"}
@@ -170,12 +203,52 @@ function Quiz() {
               className={"outlined-button"}
             />
           </div>
-
           <Button
-            onClick={() => checkAnswer()}
-            label={"Submit"}
+            onClick={() => {
+              if (quizStatus == "in_progress") {
+                checkAnswer();
+              } else {
+                alert("This quiz is submited. You can only review");
+              }
+            }}
+            label={"Save"}
             className={"primary-button"}
           />
+        </div>
+        <div className="footer">
+          {quizStatus == "in_progress" && (
+            <>
+              <Button
+                onClick={() => {
+                  dispatch(submitQuizTimer());
+                  navigate("/result");
+                }}
+                label={"Submit Quiz"}
+                className={"sucess-button"}
+              />
+              <Button
+                onClick={() => {
+                  if (window.confirm("Do you really want to quit?")) {
+                    dispatch(quitQuizTimer());
+                    navigate("/result");
+                  }
+                }}
+                label={"Quit"}
+                className={"danger-button"}
+              />
+            </>
+          )}
+          {quizStatus == "submit" && (
+            <>
+              <Button
+                onClick={() => {
+                  navigate("/result");
+                }}
+                label={"Go to result"}
+                className={"sucess-button"}
+              />
+            </>
+          )}
         </div>
       </div>
     </div>

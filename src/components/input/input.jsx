@@ -1,10 +1,7 @@
-import { memo } from "react";
 import "./input.scss";
 
 function Input(props) {
-  const { inputType = "default", value, ...rest } = props;
-
-  console.log("Input rendering...");
+  const { inputType = "default", ...rest } = props;
 
   const getInputClassName = (type) => {
     let value = "";

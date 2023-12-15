@@ -1,0 +1,29 @@
+@use './colors' as *;
+@mixin layout-styles {
+    display: grid;
+    place-content: center;
+    background-color: $secondary-color;
+    color: $primary-font-color;
+    width: 100%;
+    min-height: 100vh;
+  }
+
+  @mixin card-styles {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    border: 2px solid $primary-color;
+    width: 650px;
+    padding: 20px 30px;
+    border-radius: 6px;
+    background-color:transparent;
+    h1 {
+        font-size: 32px;
+        margin: 0;
+        color: $default-color;
+        background:linear-gradient(45deg,transparent,$primary-color,transparent);
+        border-radius: 6px;
+        text-align: center;
+    }    
+  }
+

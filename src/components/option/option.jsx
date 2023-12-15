@@ -4,8 +4,6 @@ const Option = memo(
   function Option(props) {
     const { label = "A", text, type = "default", ...rest } = props;
 
-    console.log("option rendering...");
-
     const getOptionClassName = (type) => {
       let value = "";
       switch (type) {

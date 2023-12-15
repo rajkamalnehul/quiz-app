@@ -1,0 +1,34 @@
+@use '../../scss/common/index' as *;
+
+.result-layout {
+    @include layout-styles  
+}
+
+.result-card {
+    @include card-styles
+}
+
+.result {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    
+    p{
+        font-size: 18px;
+        font-weight: 700;
+    }
+}
+
+.btn-container {
+    display:flex;
+    justify-content:space-between;
+    gap:20px;
+}
+
+.btn-container-inner {
+    flex: 1;
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+}
+

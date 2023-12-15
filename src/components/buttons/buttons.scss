@@ -36,3 +36,15 @@
     cursor: not-allowed;
 
   }
+
+  .danger-button {
+    @include button-styles();
+    background-color:#a60045;
+    color: $default-color;
+  }
+
+  .sucess-button{
+    @include button-styles();
+    background-color: #00a63d;
+    color: $default-color;
+  }
