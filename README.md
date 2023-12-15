@@ -4,4 +4,6 @@
 3. npm install - to install dependency
 4. npm run dev - to run the app,
 
-
+#config
+You can change the timer duration, score and questions inside the constant folder
+If you change anything make sure you clear your local storage
